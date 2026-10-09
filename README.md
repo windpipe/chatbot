@@ -23,6 +23,22 @@ source .venv/bin/activate
 python -m streamlit run app.py
 ```
 
+Windows PowerShell에서 소스 폴더로 이동한 뒤 설치·실행:
+
+```powershell
+uv venv .venv --python 3.12
+uv pip sync --python .venv/Scripts/python.exe requirements.lock
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+`requirements.lock`은 Python 3.12 기준으로 모든 플랫폼에 대한 조건을 포함합니다.
+Windows에서는 `uvloop`가 제외되고 Windows 전용 의존성이 설치됩니다.
+의존성을 갱신할 때는 플랫폼 조건이 사라지지 않도록 다음 명령을 사용하세요:
+
+```bash
+uv pip compile requirements.in --python-version 3.12 --universal --generate-hashes --output-file requirements.lock
+```
+
 기본 PDF를 `data/documents/공무원여비100문100답.pdf`에 두거나 화면에서 PDF를 업로드하세요.
 문서와 비밀정보는 Git에서 제외합니다. GitHub에서 소스를 복제해도 PDF는 포함되지 않습니다.
 기본 PDF는 현재 클라우드 파일시스템에 준비되어 있습니다.
