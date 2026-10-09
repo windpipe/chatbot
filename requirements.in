@@ -1,0 +1,11 @@
+streamlit
+langchain
+langchain-openai
+langchain-anthropic
+langchain-google-genai
+langchain-ollama
+langchain-chroma
+langchain-text-splitters
+pypdf
+rank-bm25
+pytest
