@@ -47,3 +47,16 @@ def test_password_gate(monkeypatch):
     app.button[0].click().run()
     assert not app.exception
     assert app.title[0].value == '공무원 여비 문서 상담'
+
+
+def test_cloud_secrets_password_gate(monkeypatch):
+    clear_credentials(monkeypatch)
+    app = AppTest.from_file(str(ROOT / 'app.py'))
+    app.secrets['APP_PASSWORD'] = 'fixture-cloud-password'
+    app.run()
+    assert not app.exception
+    assert not app.chat_input
+    app.text_input[0].set_value('fixture-cloud-password')
+    app.button[0].click().run()
+    assert not app.exception
+    assert app.title[0].value == '공무원 여비 문서 상담'

@@ -17,8 +17,20 @@ DEFAULT_PDF = ROOT / 'data/documents/공무원여비100문100답.pdf'
 st.set_page_config(page_title='공무원 여비 문서 상담', page_icon='📚', layout='wide')
 
 
+def get_setting(name):
+    if not name:
+        return ''
+    value = os.environ.get(name, '')
+    if value:
+        return value
+    try:
+        return str(st.secrets.get(name, ''))
+    except FileNotFoundError:
+        return ''
+
+
 def authenticated():
-    password = os.environ.get('APP_PASSWORD', '')
+    password = get_setting('APP_PASSWORD')
     if not password:
         return True
     if st.session_state.get('authenticated'):
@@ -58,7 +70,7 @@ with st.sidebar:
         embedding_url = st.text_input('임베딩 API 주소', value='http://127.0.0.1:11434' if embedding_provider == 'Ollama' else '',
                                       placeholder='OpenAI 기본 API는 비워두세요. 호환 API는 /v1 포함')
         embedding_key_input = st.text_input('임베딩 API 키', type='password')
-        embedding_key = embedding_key_input or os.environ.get('EMBEDDING_API_KEY', '')
+        embedding_key = embedding_key_input or get_setting('EMBEDDING_API_KEY')
         embedding_config = (embedding_provider, embedding_model, embedding_key, embedding_url)
     consent = st.checkbox('설정한 API 서버로 질문·문서 내용 전송에 동의', value=False)
     build = st.button('문서 색인 만들기 / 갱신', type='primary', use_container_width=True)
@@ -70,7 +82,7 @@ with st.sidebar:
     model_name = st.text_input('모델 ID', value=default_model, key=f'model_{provider}',
                                help='사용 가능한 정확한 모델 ID를 입력하세요. 예시 모델은 계정·서버별로 다를 수 있습니다.')
     key_input = st.text_input('LLM API 키', type='password', key=f'key_{provider}') if provider != 'Ollama' else ''
-    api_key = key_input or os.environ.get('LLM_API_KEY', '') or os.environ.get(key_name, '')
+    api_key = key_input or get_setting('LLM_API_KEY') or get_setting(key_name)
     base_url = ''
     if provider in ('Ollama', 'OpenAI 호환 API'):
         base_url = st.text_input('LLM API 주소', value='http://127.0.0.1:11434' if provider == 'Ollama' else '',

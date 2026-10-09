@@ -106,6 +106,23 @@ curl --fail http://127.0.0.1:8501/_stcore/health
 
 ## 서비스 배포
 
+### Streamlit Community Cloud
+
+GitHub 저장소 `windpipe/chatbot`, 브랜치 `main`, 시작 파일 `app.py`를 선택하고
+배포 설정에서 Python **3.12**를 선택하세요. Cloud는 `requirements.txt`를 자동 감지해
+그 파일이 참조하는 `requirements.lock`으로 의존성을 설치합니다.
+잠금 파일은 Python 3.12를 기준으로 생성·검증했습니다.
+
+Manage app의 Secrets에 `APP_PASSWORD`와 선택한 제공자의 `LLM_API_KEY`를
+TOML 문자열 항목으로 안전하게 설정할 수 있습니다. 앱은 환경 변수를 먼저 읽고,
+값이 없으면 Streamlit Secrets를 읽습니다. 실제 비밀정보를 GitHub에 올리지 마세요.
+키를 이용하는 제공자와 모델 ID·API 주소는 사이드바에서 선택하고 데이터 전송에 동의해야 합니다.
+기본 PDF는 GitHub에 없으므로 배포 후 업로드하고 색인을 만드세요.
+문서 업로드와 색인은 세션별이며 서버 재시작 시 복구되지 않습니다.
+이 형태는 데모 배포용이며 아래의 기관 운영 요건을 충족하는 정식 서비스는 아닙니다.
+
+### 자체 서버
+
 현재 설정은 localhost 개발용입니다. 외부 공개 전 `APP_PASSWORD`를 안전하게 주입하고,
 인증 및 HTTPS를 제공하는 프록시 뒤에서 실행하세요:
 

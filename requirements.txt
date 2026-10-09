@@ -1,0 +1,3 @@
+# Streamlit Community Cloud discovers this file automatically.
+# Reuse the platform-aware, hash-pinned dependencies for local and cloud installs.
+-r requirements.lock
